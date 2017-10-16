@@ -1,0 +1,10 @@
+def f2(n):
+  return [(x, len(x)) for x in n.split()]
+#print f2("ala ma kota")
+
+
+def fLogic1(a):
+  return a % 2 ==0
+  
+def z4(fun, list):
+  return[x for x in list if fun(x)]
