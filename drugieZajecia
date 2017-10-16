@@ -8,3 +8,14 @@ def fLogic1(a):
   
 def z4(fun, list):
   return[x for x in list if fun(x)]
+  
+  
+  import os, sys
+
+def fun(path, ext):
+  fileList = os.listdir(path)
+  for x in fileList:
+    if(x == '*.' + ext):
+      print x
+      
+fun()
