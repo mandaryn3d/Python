@@ -1,0 +1,138 @@
+zadanie1
+class liczbaZespolona:
+  number = 0+0j
+  def __init__(self, zm):#constructor
+    self.number = zm
+  def __add__(self, other):# operator+
+    return self.number + other.number
+  def __iadd__(self, other): #operator+=
+    return liczbaZespolona(self + other)
+    
+  def __sub__(self, other): #operator-
+    return self.number - other.number
+  def __isub__(self, other): #operator-=
+    return liczbaZespolona(self - other)
+    
+  def __mul__(self, other): #operator*
+    return self.number * other.number
+    
+  def __div__(self, other): #operator/
+    return self.number / other.number
+    
+  def __str__(self):#return string
+    return str(self.number)
+    
+  def __abs__(self):#modulus
+    return abs(self.number)
+    
+  def __lt__(self, other):# <
+    return abs(self.number) < abs(other.number)
+  def __le__(self, other):# <=
+    return abs(self.number) <= abs(other.number)
+  def __eq__(self, other):# ==
+    return abs(self.number) == abs(other.number)
+  def __ne__(self, other):# !=
+    return abs(self.number) != abs(other.number)
+  def __gt__(self, other):# >
+    return abs(self.number) > abs(other.number)
+  def __ge__(self, other):# >= 
+    return abs(self.number) >= abs(other.number)
+    
+a=liczbaZespolona(4+4j)
+b=liczbaZespolona(2-1j)
+print a+b+6j
+
+print a-b
+print a*b
+print a/b
+a+=b
+print a
+print abs(a)
+c= liczbaZespolona(0+1j)
+a = c
+print a
+print a<b
+print a<=b
+print a==b
+print a!=b
+print a>b
+print a>=b
+
+zadanie 2
+class punkt2d:
+  x = None
+  y = None
+  def __init__(self, zX, zY):
+    self.x = zX
+    self.y = zY
+  def odleglosc(self, other):
+    return abs(self.x - other.x) + abs(self.y - other.y)
+    #metoda taksowkowa
+    
+class punkt3d(punkt2d):
+  z = None
+  def __init__(self, zX, zY, zZ):
+    self.x = zX
+    self.y = zY
+    self.z = zZ
+  def odleglosc(self, other):
+    return abs(self.x - other.x) + abs(self.y - other.y) +abs(self.z - other.z)
+    #metoda taksowkowa
+    
+a = punkt2d(0,0)
+b = punkt2d(2,1)
+print a.odleglosc(b)
+
+a1 = punkt3d(0,0,0)
+b1 = punkt3d(1,2,3)
+print a1.odleglosc(b1)
+
+zadanie 3
+class obiekt:
+  tytul = None
+  def __init__(self, zm):
+    self.tytul = zm
+  def __str__(self):
+    return self.tytul
+  def __add__(self, other):
+    return str(self) + other
+  def __radd__(self, other):
+    return other + str(self)
+class ksiazka(obiekt):
+  autor = None
+  def __init__(self, title, autor):
+    self.tytul = title
+    self.autor = autor
+  def __str__(self):
+    return self.tytul + ", "+ self.autor
+
+class baza:
+  kolekcja = None
+  def __init__(self, zm):
+    self.kolekcja = [zm]
+  def dodaj(self,item):
+    if (False == self.find(item)):#bez duplikatow
+      self.kolekcja.append(item)
+  def wypisz(self):
+    i=0
+    for x in self.kolekcja:
+      print "%d "%i + x
+      i+=1
+  def find(self, serchable):
+    return serchable in self.kolekcja
+  def delete(self, todel):
+    self.kolekcja.remove(todel)
+  def replace(self, toBeReplaced, replacement):
+    if (True == self.find(toBeReplaced)):
+      #znajdz element i go zastap
+a = ksiazka('hobbit', "tolkien")
+b = ksiazka('pan mercedes', "s. king")
+print a
+
+bazadanych = baza(a)
+bazadanych.dodaj(b)
+bazadanych.dodaj(b)
+bazadanych.wypisz()
+print bazadanych.find(a)
+bazadanych.delete(a)
+print bazadanych.find(a)
