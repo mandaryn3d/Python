@@ -1,0 +1,161 @@
+#zadanie pierwsze
+import sys
+
+def wypiszPlik(path, maxLen):
+    plik = open(path)
+    for line in plik:
+        while(maxLen < len(line)):
+            print line[0:maxLen]
+            line = line[maxLen:]
+        if("\n" != line and None != line):
+            print line
+    plik.close()
+    
+sciezkaDoWczytania = sys.argv[1]
+
+number = input("Maksymalna dlugosc linii?")
+print wypiszPlik(sciezkaDoWczytania, number)
+
+    
+#zadanie drugie
+import sys
+
+def wypiszPlik(path, maxLen):
+    plik = open(path)
+    for line in plik:
+        while(maxLen < len(line)):
+            print line[0:maxLen]
+            line = line[maxLen:]
+        if(maxLen > len(line)):
+            print line.center(maxLen)
+        else:
+            print "default"
+            print line
+    plik.close()
+    
+sciezkaDoWczytania = sys.argv[1]
+
+number = input("Maksymalna dlugosc linii?")
+print wypiszPlik(sciezkaDoWczytania, number)
+
+#zadanie trzecie
+import sys
+import re
+
+ip_regex = re.compile(r'^'+
+        r'(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]).'+
+        r'(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]).'+
+        r'(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]).'+
+        r'(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])$'
+        )
+
+def wypiszPlik(path):
+    plik = open(path)
+    for line in plik:
+        result = ip_regex.match(line.replace("\n",""))
+        if result:
+            print line.replace("\n","")
+    plik.close()
+    
+sciezkaDoWczytania = sys.argv[1]
+
+print wypiszPlik(sciezkaDoWczytania)
+
+#zadanie czwarte
+#!/usr/bin/env python
+# encoding: utf-8
+
+import sys
+import re
+
+pesel_regex = re.compile(r'^'+
+        r'([0-9]?[0-9]?[0-9]?[0-9]?[0-9]?[0-9]?[0-9]?[0-9]?[0-9]?[0-9]?[0-9])$'
+        )
+
+def wypiszPlik(path):
+    plik = open(path)
+    for line in plik:
+        result = pesel_regex.match(line.replace("\n",""))
+        if result:
+            if int(line[-3])%2:
+                print line[4:6] + '-' + line[2:4] + '-' + line[:2] + " S:%K"
+            else:
+                print line[4:6] + '-' + line[2:4] + '-' + line[:2] + " S:%M"
+    plik.close()
+    
+sciezkaDoWczytania = sys.argv[1]
+
+print wypiszPlik(sciezkaDoWczytania)
+
+#piate zadanie
+#!/usr/bin/env python
+# encoding: utf-8
+
+import sys
+import re
+ksiazka_regex = re.compile()#regex wypalujacy ksiazki
+class ksiazka:
+    def __init__(self, title, nISBN, author):
+        self.tytul = title
+        self.ISBN = nISBN
+        self.autor = author
+    def __str__(self):
+        return self.tytul + " " + self.ISBN + " " + self.autor
+    def __add__(self, other):
+        return str(self) + other
+    def __radd__(self, other):
+        return other + str(self)
+        
+class database:
+    kolekcja = None
+    def __init__(self, zm):
+        self.kolekcja = [zm]
+    def dodaj(self,item):
+        if (False == self.find(item)):#bez duplikatow
+            self.kolekcja.append(item)
+    def find(self, serchable):
+        return serchable in self.kolekcja
+    def delete(self, todel):
+        self.kolekcja.remove(todel)
+    def wypisz(self):
+        i=0
+        for x in self.kolekcja:
+            print "%d "%i + x
+            i+=1
+    def zapiszDoPliku(self, path):
+        plik = open(path, 'w')
+        i=0
+        for x in self.kolekcja:
+            plik.write(x + '\n')
+            i+=1
+        plik.close()
+    def wczytajZPliku(self, path):
+        plik.open(path)
+        for line in plik:
+            result = ksiazka_regex(line.replace("\n","")
+            if result:
+                book = line.split(";")
+                self.dodaj(ksiazka(book[0], book[1], book[2])
+        plik.close()
+
+
+
+
+sciezkaDoPliku = sys.argv[1]
+
+a = ksiazka('hobbit', "222-111", "tolkien")
+b = ksiazka('pan mercedes', "222-111", "s. king")
+print a
+
+bazadanych = database(a)
+bazadanych.dodaj(b)
+bazadanych.dodaj(b)
+bazadanych.wypisz()
+bazadanych.zapiszDoPliku(sciezkaDoPliku)
+
+
+
+
+    
+
+
