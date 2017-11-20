@@ -1,0 +1,73 @@
+#zadanie pierwsze
+from math import sqrt
+import sys
+def pierw(x):
+  try:
+    result = sqrt(x)
+  except:
+    print sys.exc_info()[0]
+    return None
+  else:
+    return result
+    
+    
+print pierw(4)
+print pierw(2)
+print pierw(-4)
+
+#zadanie drugie
+import re
+import sys
+regexEmail = re.compile(r'[^@]+@[^@]+\.[^@]+')
+
+class adresEmail:
+  email = None
+  def __init__(self, adres):
+    if regexEmail.match(adres):
+      self.email = adres
+    else:
+      raise ValueError('invalid email')
+  def __str__(self):
+    return self.email
+
+valid = 'emai1@example.com'
+invalid = 'someRandomThings'
+
+try:
+  obj1 = adresEmail(valid)
+except:
+  print sys.exc_info()[0]
+else:
+  print obj1
+  
+print ''
+try:
+  obj2 = adresEmail(invalid)
+except:
+  print sys.exc_info()[0]
+else:
+  print obj2
+
+#zadanie trzecie
+pip install virtualenv
+virtualenv env_pep8
+env_pep8\Scripts\activate
+pip install pep8
+printf ‘print “test” >test.py
+pep8 --first test.py
+deactivate
+
+#zadanie czwarte
+import sys
+import urllib2
+
+
+sciezkaDoPliku = sys.argv[1]
+plik = open(sciezkaDoPliku, 'w')
+    
+res = urllib2.urlopen("http://python.org")
+plik.write(res.read())
+    
+plik.close()
+#zadanie szoste
+
