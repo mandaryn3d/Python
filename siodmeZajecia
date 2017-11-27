@@ -1,0 +1,108 @@
+#zadanie pierwsze
+import subprocess
+
+cppCompile = subprocess.call(
+    ["g++ zadanie1cpp.cpp && ./a.out"], shell=True
+)
+
+if 1==cppCompile:
+    print "wystapil blad"
+    
+#zadanie drugie
+
+import subprocess
+import re
+
+
+
+dirStr = '''K1
+    K2
+    K3
+        K4
+K5
+    K6'''  
+lista = []
+napis = ''
+for line in dirStr:
+    if(line[0] == 'K'):
+        lista = []
+        lista.append(line[0:2])
+        napis = line[0:2]
+    i = 0
+    while(line[0:2] == "   "):
+        napis += lista[i]
+        napis += '/'
+        i+=1
+        line = line[2:]
+    lista.append(line[0:1])
+    napis = line[0:1]
+    createDir = subprocess.call(
+        ['mkdir -p ' + napis], shell=True
+    )
+
+
+#zadanie trzecie
+#rozklad na czynniki pierwsze
+#wynik w postaci krotek [(p1, w1), (p2,w2)....]
+#w postaci p1^w1 * p2*w2  
+
+import math
+import sys
+
+def rozklad(x):
+    if x<=0:
+        return 0
+    i=2
+    e=math.floor(math.sqrt(x))
+    r=[]
+    while i<=e:
+        if x%i==0:
+            r.append(int(i))
+            x/=i
+            e=math.floor(math.sqrt(x))
+        else:
+            i+=1
+    if x>1: 
+        r.append(int(x))
+    return r
+
+
+
+liczbaDoPodzialu = sys.argv[1]
+
+listaCzynnikow = rozklad(float(liczbaDoPodzialu))
+krotki = []
+while( listaCzynnikow):
+    podloga = listaCzynnikow[0]
+    wykladnik = 0
+    while(listaCzynnikow and podloga == listaCzynnikow[0]):
+        wykladnik += 1
+        listaCzynnikow.pop(0)
+    krotki.append((podloga,wykladnik))
+print krotki
+
+#zadanie czwarte
+class mojaLista:
+    m_list = None
+    def __init__(self):
+        self.m_list = []
+    def append(self, arg):
+        self.m_list.append(arg)    
+    def pop(self, index):
+       if index >= 0:
+            self.m_list.pop(index)
+       else:
+            raise IndexError  
+    def sort(self):
+        self.m_list = sorted(lista)
+    def __add__(self, other):# operator+
+        return self.number + other.number
+    def __iadd__(self, other): #operator+=
+        return liczbaZespolona(self + other)
+    def __getitem__(self, index): #operator[]
+        if index >= 0:
+            return self.m_list[index]
+        else:
+            raise IndexError
+
+
