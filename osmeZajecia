@@ -1,0 +1,47 @@
+import Tkinter as tk
+
+#pierwsze zadanie
+def changeColor(item, color):
+    item.configure(fg = color)
+    
+def generateOutput(text):
+    print text
+root = tk.Tk()
+
+b1 = tk.Button(root, text="regular button", command=lambda: generateOutput("regular button says Hi"))
+b1.grid(column=0,row=0)
+tk.Radiobutton(root, text="Yellow", value="yellow", command=lambda: changeColor(b1, "yellow")).grid(column=0,row=1)
+tk.Radiobutton(root, text="Red", value="red", command=lambda: changeColor(b1, "red")).grid(column=0,row=2)
+tk.Radiobutton(root, text="Green", value="green", command=lambda: changeColor(b1, "green")).grid(column=0,row=3)
+tk.Radiobutton(root, text="Blue", value="blue", command=lambda: changeColor(b1, "blue")).grid(column=0,row=4)
+
+root.mainloop()
+
+
+#drugie zadanie
+
+import Tkinter as tk
+import time
+
+def changeText(item, txt):
+    item.delete(0, tk.END)#
+    item.insert(tk.END, txt)
+    
+def startTimer(item):
+    for x in reversed(range(30)):
+        changeText(item, str(x))
+        #time.sleep(1)
+    print "koniec timera"
+    
+root = tk.Tk()
+textArea = tk.Text(root, height=10, width=10)
+textArea.insert(tk.END, "30")
+textArea.grid(column=0, row=0)
+b1 = tk.Button(root, text="Start", command=lambda: startTimer(textArea))
+b1.grid(column=0,row=1)
+
+
+root.mainloop()
+
+#trzecie zadanie
+#kalkulator
