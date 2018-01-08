@@ -1,0 +1,232 @@
+#zad1
+
+import sqlite3
+
+connection = sqlite3.connect('ksiazki.db')
+
+cursor = connection.cursor()
+cursor.execute('''CREATE TABLE IF NOT EXISTS
+ksiazki (id Integer, name String)
+''')
+
+cursor.execute('''
+INSERT INTO ksiazki(id,name) 
+SELECT 1, 'Mr Mercedes'
+WHERE NOT EXISTS(SELECT 1 FROM ksiazki WHERE id = 1)
+''')
+cursor.execute('''
+INSERT INTO ksiazki(id,name) 
+SELECT 2, 'Town of Salem'
+WHERE NOT EXISTS(SELECT 1 FROM ksiazki WHERE id = 2)
+''')
+cursor.execute('''
+INSERT INTO ksiazki(id,name) 
+SELECT 3, 'Dark Tower'
+WHERE NOT EXISTS(SELECT 1 FROM ksiazki WHERE id = 3)
+''')
+
+for row in cursor.execute('SELECT * FROM ksiazki'):
+    print row
+connection.commit()
+
+connection.close()
+
+
+#zad2
+import sqlite3
+
+connection = sqlite3.connect('ksiazki.db')
+
+cursor = connection.cursor()
+cursor.execute('''CREATE TABLE IF NOT EXISTS
+ksiazki (id Integer, name String)
+''')
+
+cursor.execute('''
+INSERT INTO ksiazki(id,name) 
+SELECT 1, 'Mr Mercedes'
+WHERE NOT EXISTS(SELECT 1 FROM ksiazki WHERE id = 1)
+''')
+cursor.execute('''
+INSERT INTO ksiazki(id,name) 
+SELECT 2, 'Town of Salem'
+WHERE NOT EXISTS(SELECT 1 FROM ksiazki WHERE id = 2)
+''')
+cursor.execute('''
+INSERT INTO ksiazki(id,name) 
+SELECT 3, 'Dark Tower'
+WHERE NOT EXISTS(SELECT 1 FROM ksiazki WHERE id = 3)
+''')
+
+connection.commit()
+
+cursor.execute('BEGIN')
+cursor.execute('''
+INSERT INTO ksiazki(id,name) 
+SELECT 4, 'Eyes of Dragon'
+WHERE NOT EXISTS(SELECT 1 FROM ksiazki WHERE id = 4)
+''')
+connection.rollback()
+for row in cursor.execute('SELECT * FROM ksiazki'):
+    print row
+
+
+connection.close()
+
+#zad3
+import sqlite3
+
+connection = sqlite3.connect('ksiazki.db')
+
+cursor = connection.cursor()
+cursor.execute('''CREATE TABLE IF NOT EXISTS
+ksiazki (id Integer Primary Key, name String)
+''')
+
+cursor.execute('''
+INSERT INTO ksiazki(id,name) 
+SELECT 1, 'Mr Mercedes'
+WHERE NOT EXISTS(SELECT 1 FROM ksiazki WHERE id = 1)
+''')
+cursor.execute('''
+INSERT INTO ksiazki(id,name) 
+SELECT 2, 'Town of Salem'
+WHERE NOT EXISTS(SELECT 1 FROM ksiazki WHERE id = 2)
+''')
+cursor.execute('''
+INSERT INTO ksiazki(id,name) 
+SELECT 3, 'Dark Tower'
+WHERE NOT EXISTS(SELECT 1 FROM ksiazki WHERE id = 3)
+''')
+
+
+cursor.execute('''CREATE TABLE IF NOT EXISTS
+katalog (
+    id Integer, 
+    price Real,
+    FOREIGN KEY(id) REFERENCES ksiazki(id)
+)
+''')
+cursor.execute('''
+INSERT INTO katalog(id,price) 
+SELECT 1, 2.5
+WHERE NOT EXISTS(SELECT 1 FROM katalog WHERE id = 1)
+''')
+cursor.execute('''
+INSERT INTO katalog(id,price) 
+SELECT 2, 3.5
+WHERE NOT EXISTS(SELECT 1 FROM katalog WHERE id = 2)
+''')
+cursor.execute('''
+INSERT INTO katalog(id,price) 
+SELECT 3, 10.0
+WHERE NOT EXISTS(SELECT 1 FROM katalog WHERE id = 3)
+''')
+connection.commit()
+
+
+for row in cursor.execute('SELECT * FROM ksiazki'):
+    print row
+    
+for row in cursor.execute('SELECT * FROM katalog'):
+    print row
+
+
+connection.close()
+
+#zad4
+import sqlite3
+
+from sqlalchemy import Column, Integer, String, NUMERIC
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.schema import ForeignKey
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+connection = sqlite3.connect('ksiazki.db')
+
+cursor = connection.cursor()
+cursor.execute('''CREATE TABLE IF NOT EXISTS
+ksiazki (id Integer Primary Key, name String)
+''')
+
+cursor.execute('''
+INSERT INTO ksiazki(id,name) 
+SELECT 1, 'Mr Mercedes'
+WHERE NOT EXISTS(SELECT 1 FROM ksiazki WHERE id = 1)
+''')
+cursor.execute('''
+INSERT INTO ksiazki(id,name) 
+SELECT 2, 'Town of Salem'
+WHERE NOT EXISTS(SELECT 1 FROM ksiazki WHERE id = 2)
+''')
+cursor.execute('''
+INSERT INTO ksiazki(id,name) 
+SELECT 3, 'Dark Tower'
+WHERE NOT EXISTS(SELECT 1 FROM ksiazki WHERE id = 3)
+''')
+
+
+cursor.execute('''CREATE TABLE IF NOT EXISTS
+katalog (
+    id Integer Primary Key, 
+    price Real,
+    book_id Integer,
+    FOREIGN KEY(book_id) REFERENCES ksiazki(id)
+)
+''')
+cursor.execute('''
+INSERT INTO katalog(id,price, book_id) 
+SELECT 1, 2.5, 1
+WHERE NOT EXISTS(SELECT 1 FROM katalog WHERE id = 1)
+''')
+cursor.execute('''
+INSERT INTO katalog(id,price, book_id) 
+SELECT 2, 3.5, 2
+WHERE NOT EXISTS(SELECT 1 FROM katalog WHERE id = 2)
+''')
+cursor.execute('''
+INSERT INTO katalog(id,price,book_id) 
+SELECT 3, 10.0, 3
+WHERE NOT EXISTS(SELECT 1 FROM katalog WHERE id = 3)
+''')
+connection.commit()
+
+
+for row in cursor.execute('SELECT * FROM ksiazki'):
+    print row
+    
+for row in cursor.execute('SELECT * FROM katalog'):
+    print row
+
+
+connection.close()
+#--------------------------------------------
+
+def printCatalog(session):
+    for ksiazka in session.query(Ksiazka).all():
+        for catalog in session.query(Katalog).all():
+            if (ksiazka.id == catalog.book_id):
+                print ksiazka.id, ksiazka.name, catalog.price
+                
+       
+
+Base = declarative_base()
+class Ksiazka(Base):
+    __tablename__ = 'ksiazki'
+    id = Column(Integer, primary_key = True)
+    name = Column(String(100))
+    
+class Katalog(Base):
+    __tablename__ = 'katalog'
+    id = Column(Integer, primary_key = True)
+    price = Column(NUMERIC)
+    book_id = Column(Integer, ForeignKey("ksiazki.id"))
+
+engine = create_engine('sqlite:///ksiazki.db', echo=False) 
+
+
+Session = sessionmaker(bind=engine)
+session = Session() 
+
+printCatalog(session)
